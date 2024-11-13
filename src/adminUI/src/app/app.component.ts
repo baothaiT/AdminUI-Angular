@@ -12,13 +12,19 @@ import { UrlConfig } from './../shared/common/urlConfig';
 })
 export class AppComponent {
   title = 'adminUI';
-  showMainTemplate: boolean = false;
+  _showMainTemplate: boolean = false;
+
+  _homeURL = UrlConfig.emptyURL;
+  _accountURL = UrlConfig.accountURL;
+  _proxiesURL = UrlConfig.proxiesURL;
+  _logURL = UrlConfig.logsURL;
+  _tableexampleURL = UrlConfig.tableURL;
 
   constructor(private router: Router) {
     this.router.events.subscribe(() => {
       if (UrlConfig.urlWithTemplate.includes(this.router.url))
       {
-        this.showMainTemplate = true;
+        this._showMainTemplate = true;
       }
     });
   }

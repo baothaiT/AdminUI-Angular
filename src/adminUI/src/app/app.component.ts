@@ -18,6 +18,7 @@ export class AppComponent {
   _accountURL = UrlConfig.accountURL;
   _proxiesURL = UrlConfig.proxiesURL;
   _logURL = UrlConfig.logsURL;
+  _tradeBalanceURL = UrlConfig.tradeBalanceURL;
   _tableexampleURL = UrlConfig.tableURL;
 
   constructor(private router: Router) {

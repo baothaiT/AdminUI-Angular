@@ -11,6 +11,7 @@ export class UrlConfig {
     public static internalServerErrorsURL = 'internalservererror';
     public static unauthorizedURL = 'unauthorized';
     public static forgotPasswordURL = 'forgotpassword';
+    public static tradeBalanceURL = 'tradebalance';
     public static allURL = '**';
 
 
@@ -20,5 +21,6 @@ export class UrlConfig {
         '/' + UrlConfig.proxiesURL,
         '/' + UrlConfig.accountURL,
         '/' + UrlConfig.tableURL,
+        '/' + UrlConfig.tradeBalanceURL,
     ];
 }

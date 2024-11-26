@@ -11,6 +11,7 @@ import { NotFoundComponent } from "./NotFound/NotFound.component";
 import { InternalServerErrorComponent } from "./InternalServerError/InternalServerError.component";
 import { UnauthorizedComponent } from "./Unauthorized/Unauthorized.component";
 import { ForgotPasswordComponent } from "./ForgotPassword/ForgotPassword.component";
+import { TradeBalanceComponent } from "./Trade-Balance/Trade-Balance.component";
 
 export const routes: Routes = [
     { path: UrlConfig.emptyURL, redirectTo: UrlConfig.homeURL, pathMatch: 'full' },
@@ -25,5 +26,6 @@ export const routes: Routes = [
     { path: UrlConfig.internalServerErrorsURL, component: InternalServerErrorComponent },
     { path: UrlConfig.unauthorizedURL, component: UnauthorizedComponent },
     { path: UrlConfig.forgotPasswordURL, component: ForgotPasswordComponent },
+    { path: UrlConfig.tradeBalanceURL, component: TradeBalanceComponent },
     { path: UrlConfig.allURL, component: NotFoundComponent }
   ];

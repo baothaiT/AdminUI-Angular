@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TradeService } from './../../shared/services/historyOrderTrading/trade.service';
+import { HistoryOrderTradeInterface } from '../../shared/interfaces/HistoryOrderTrade-interface';
 
 @Component({
   standalone: true,
@@ -11,26 +13,54 @@ import { CommonModule } from '@angular/common';
 })
 export class TradeBalanceComponent implements OnInit {
   title = 'Trade Balance';
-  items = [
-    { name: 'Item 1', checked: false },
-    { name: 'Item 2', checked: false },
-    { name: 'Item 3', checked: false },
-  ];
-
-  checked = true;
-  constructor() { }
+  isLoading: boolean = false;
+  errorMessage: string | null = null;
+  historyOrderTrade: HistoryOrderTradeInterface[] = [];
+  constructor(private tradeService: TradeService) 
+  { }
 
   ngOnInit() {
+    this.fetchHistoryOrderTrade();
+    console.log(this.historyOrderTrade);
+    
   }
 
-  Confirm(item: { checked: boolean }) {
-    item.checked = !item.checked; // Toggle the checked value
-    console.log('Item checked status:', item.checked); // Log the updated value
+  Confirm(item: { id: string, isResovlve: boolean }) {
+    item.isResovlve = !item.isResovlve; // Toggle the checked value
+
+    this.tradeService.changeIsResolve(item.id).subscribe({
+      next: (isResolved) => console.log('Success:', isResolved),
+      error: (err) => console.error('Failed:', err.message),
+    });
   }
 
-  Console()
+  FormatList()
   {
-    console.log(this.checked);
-  }
+    this.historyOrderTrade = this.historyOrderTrade.map(item => {
+      const formattedDatetime = new Date(item.orderTime)
+        .toISOString()
+        .slice(0, 19)
+        .replace("T", " ");
+      return {
+        ...item,
+        orderTime: formattedDatetime,
+      };
+    });
+   }
 
+  fetchHistoryOrderTrade(): void {
+    this.isLoading = true;
+    this.errorMessage = null;
+    this.tradeService.getTrades().subscribe({
+      next: (historyOrderTrade: HistoryOrderTradeInterface[]) => {
+        this.historyOrderTrade = historyOrderTrade;
+        this.isLoading = false;
+        this.FormatList();
+      },
+      error: (error: any) => {
+        this.errorMessage = 'Failed to load history order trade. Please try again later.';
+        this.isLoading = false;
+      }
+    });
+  }
 }

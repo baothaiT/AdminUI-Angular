@@ -10,26 +10,46 @@
             <table class="table table-bordered">
               <thead>
                 <tr>
-                  <th>Select</th>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Age</th>
+                  <th></th>
+                  <th>Order Time</th>
+                  <th>Symbol</th>
+                  <th>Side</th>
+                  <th>Order Price</th>
+                  <th>Total</th>
+                  <th>Order Value</th>
+                  <th>Fee</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let item of items" [ngClass]="{ 'line-through': item.checked, 'bg-secondary': item.checked }">
+                <tr *ngFor="let itemTrade of historyOrderTrade" [ngClass]="{ 
+                    'line-through': itemTrade.isResovlve, 
+                    'bg-secondary': itemTrade.isResovlve,
+                    'text-white': itemTrade.isResovlve}">
                    <td>
                     <button 
                       type="button" 
                       class="btn"
-                      [ngClass]="{ 'btn-secondary': !item.checked, 'btn-success': item.checked }" 
-                      (click)="Confirm(item)">
+                      [ngClass]="{ 'btn-secondary': !itemTrade.isResovlve, 'btn-light': itemTrade.isResovlve }" 
+                      (click)="Confirm(itemTrade)">
                       Confirm
                     </button>
                   </td>
-                  <td>{{ item.name }}</td>
-                  <td>John Doe</td>
-                  <td>30</td>
+                  <td>{{itemTrade.orderTime}}</td>
+                  <td>{{itemTrade.symbol_Prefix}}/{{itemTrade.symbol_Suffix}}</td>
+                  <td>{{itemTrade.side}}</td>
+                  <td>{{itemTrade.fillAndOrderPrice_Suffix}}</td>
+                  <td>{{itemTrade.filledAndTotal_Suffix_Value}}</td>
+                  <td>{{itemTrade.filledAndOrderValue_Prefix}}</td>
+                  <td>{{itemTrade.fee}}
+                    @if (itemTrade.side == 'BUY') 
+                    {
+                      /{{itemTrade.symbol_Prefix}}
+                    }
+                    @else 
+                    {
+                      /{{itemTrade.symbol_Suffix}}
+                    }
+                  </td>
                 </tr>
               </tbody>
             </table>

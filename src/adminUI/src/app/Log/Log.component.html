@@ -1,43 +1,50 @@
 <main>
   <div class="container-fluid px-4">
-      <ol class="breadcrumb mb-4">
-          <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
-          <li class="breadcrumb-item active">{{title}}</li>
-      </ol>
-      <h1 class="mt-4">{{title}}</h1>
-      <div class="card mb-4">
-          <div class="card-body">
-            <table class="table">
-                <thead>
-                  <tr>
-                    <th class="w-25 p-3" scope="col">Start</th><!-- StartDatetime -->
-                    <th class="w-25 p-3" scope="col">Component</th>
-                    <th class="w-50 p-3" scope="col">Message</th>
-                    <th scope="col">Code</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="table-success">
-                    <td scope="row">24/11/2024 00:00:00</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>mdo</td>
-                  </tr>
-                  <tr class="table-danger">
-                    <td scope="row">24/11/2024 00:00:00</td>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>fat</td>
-                  </tr>
-                  <tr>
-                    <td scope="row">24/11/2024 00:00:00</td>
-                    <td>Larry the Bird</td>
-                    <td>twitter</td>
-                    <td>twitter</td>
-                  </tr>
-                </tbody>
-              </table>
-          </div>
+    <ol class="breadcrumb mb-4">
+      <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+      <li class="breadcrumb-item active">{{title}}</li>
+    </ol>
+    <h1 class="mt-4">{{title}}</h1>
+    <div class="card mb-4">
+      <div class="card-body">
+        <div>
+          <button class="btn btn-success" (click)="submitLog(this.newLogSuccess)"> Submit Success </button>
+          <button class="btn btn-danger" (click)="submitLog(this.newLogError)"> Submit Danger </button>
+        </div>
+        <div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="w-25 p-3" scope="col">Start</th>
+                <th class="w-25 p-3" scope="col">Component</th>
+                <th scope="w-25 p-3">Code</th>
+                <th class="w-25 p-3" scope="col">Message</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (log of logs; track $index) {
+              @if(log.code == 200){
+              <tr class="table-success">
+                <td scope="row">{{log.startDateTime}}</td>
+                <td>{{log.componentName}}</td>
+                <td>{{log.code}}</td>
+                <td>{{log.message}}</td>
+              </tr>
+              }
+              @else {
+              <tr class="table-danger">
+                <td scope="row">{{log.startDateTime}}</td>
+                <td>{{log.componentName}}</td>
+                <td>{{log.code}}</td>
+                <td>{{log.message}}</td>
+              </tr>
+              }
+
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
+    </div>
   </div>
 </main>

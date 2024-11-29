@@ -35,8 +35,21 @@
                     </button>
                   </td>
                   <td>{{itemTrade.orderTime}}</td>
-                  <td>{{itemTrade.symbol_Prefix}}/{{itemTrade.symbol_Suffix}}</td>
-                  <td>{{itemTrade.side}}</td>
+                  <td><b>{{itemTrade.symbol_Prefix}}</b>/{{itemTrade.symbol_Suffix}}</td>
+                  <td>
+                      @if (itemTrade.side == 'BUY') 
+                      {
+                        <b class="text-success">
+                          {{itemTrade.side}}
+                        </b>
+                      }
+                      @else 
+                      {
+                        <b class="text-danger">
+                          {{itemTrade.side}}
+                        </b>
+                      }
+                  </td>
                   <td>{{itemTrade.fillAndOrderPrice_Suffix}}</td>
                   <td>{{itemTrade.filledAndTotal_Suffix_Value}}</td>
                   <td>{{itemTrade.filledAndOrderValue_Prefix}}</td>

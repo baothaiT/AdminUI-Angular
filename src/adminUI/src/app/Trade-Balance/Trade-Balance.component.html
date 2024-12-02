@@ -6,66 +6,126 @@
       </ol>
       <h1 class="mt-4">{{title}}</h1>
       <div class="card mb-4">
-          <div class="card-body">            
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Order Time</th>
-                  <th>Symbol</th>
-                  <th>Side</th>
-                  <th>Order Price</th>
-                  <th>Total</th>
-                  <th>Order Value</th>
-                  <th>Fee</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let itemTrade of historyOrderTrade" [ngClass]="{ 
-                    'line-through': itemTrade.isResovlve, 
-                    'bg-secondary': itemTrade.isResovlve,
-                    'text-white': itemTrade.isResovlve}">
-                   <td>
-                    <button 
-                      type="button" 
-                      class="btn"
-                      [ngClass]="{ 'btn-secondary': !itemTrade.isResovlve, 'btn-light': itemTrade.isResovlve }" 
-                      (click)="Confirm(itemTrade)">
-                      Confirm
-                    </button>
-                  </td>
-                  <td>{{itemTrade.orderTime}}</td>
-                  <td><b>{{itemTrade.symbol_Prefix}}</b>/{{itemTrade.symbol_Suffix}}</td>
-                  <td>
-                      @if (itemTrade.side == 'BUY') 
-                      {
-                        <b class="text-success">
-                          {{itemTrade.side}}
-                        </b>
-                      }
-                      @else 
-                      {
-                        <b class="text-danger">
-                          {{itemTrade.side}}
-                        </b>
-                      }
-                  </td>
-                  <td>{{itemTrade.fillAndOrderPrice_Suffix}}</td>
-                  <td>{{itemTrade.filledAndTotal_Suffix_Value}}</td>
-                  <td>{{itemTrade.filledAndOrderValue_Prefix}}</td>
-                  <td>{{itemTrade.fee}}
-                    @if (itemTrade.side == 'BUY') 
+          <div class="card-body">  
+
+            <!-- Start -->
+            <div>
+              <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                <div class="btn-group border border-5" role="group">
+                  <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    @if(sideDropDownName == ''){ ALL } @else { {{sideDropDownName}} }
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <li><a class="dropdown-item" href="#" (click)="setSide('')">ALL</a></li>
+                    <li><a class="dropdown-item" href="#" (click)="setSide('SELL')">SELL</a></li>
+                    <li><a class="dropdown-item" href="#" (click)="setSide('BUY')">BUY</a></li>
+                  </ul>
+                </div>
+                <div class="btn-group border border-5" role="group">
+                  <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    @if(symbolPrefixDropDownName == ''){ ALL TOKEN} @else { {{symbolPrefixDropDownName}} }
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <li><a class="dropdown-item" href="#" (click)="setSymbolPrefix('DOGE')" >DOGE</a></li>
+                    <li><a class="dropdown-item" href="#" (click)="setSymbolPrefix('MEMEFI')" >MEMEFI</a></li>
+                    <li><a class="dropdown-item" href="#" (click)="setSymbolPrefix('MAJOR')" >MAJOR</a></li>
+                  </ul>
+                </div>
+                <div class="btn-group border border-5" role="group">
+                  <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    @if(isresolveDropDownName == ''){ ALL STATUS} @else { {{isresolveDropDownName}} }
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <li><a class="dropdown-item" href="#" (click)="setIsResolve(0)" >All STATUS</a></li>
+                    <li><a class="dropdown-item" href="#" (click)="setIsResolve(1)" >RESOLVED</a></li>
+                    <li><a class="dropdown-item" href="#" (click)="setIsResolve(2)" >NOT YET</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- End -->
+            <br />
+
+            <!-- Start Select Configuration -->
+            <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+              <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" [(ngModel)]="isDisplay_OrderTime" checked>
+              <label class="btn btn-outline-secondary border border-3" for="btncheck1">Order Time</label>
+            
+              <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off" [(ngModel)]="isDisplay_Side" checked>
+              <label class="btn btn-outline-secondary border border-3" for="btncheck2">Side</label>
+            
+              <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off"  [(ngModel)]="isDisplay_OrderValue" checked>
+              <label class="btn btn-outline-secondary border border-3" for="btncheck3">Order Value</label>
+
+              <input type="checkbox" class="btn-check" id="btncheck4" autocomplete="off"  [(ngModel)]="isDisplay_Fee" checked>
+              <label class="btn btn-outline-secondary border border-3" for="btncheck4">Fee</label>
+            </div>
+            <!-- End Select Configuration -->
+            <div>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th *ngIf="isDisplay_OrderTime">Order Time</th>
+                    <th>Symbol</th>
+                    <th *ngIf="isDisplay_Side">Side</th>
+                    <th>Order Price</th>
+                    <th>Total</th>
+                    <th *ngIf="isDisplay_OrderValue">Order Value</th>
+                    <th *ngIf="isDisplay_Fee">Fee</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let itemTrade of historyOrderTradeDisplay" [ngClass]="{ 
+                      'line-through': genIsResolve(itemTrade), 
+                      'bg-secondary': genIsResolve(itemTrade),
+                      'text-white': genIsResolve(itemTrade)}">
+                     <td>
+                      <button 
+                        type="button" 
+                        class="btn"
+                        [ngClass]="{ 'btn-secondary': !genIsResolve(itemTrade), 'btn-light': genIsResolve(itemTrade) }" 
+                        (click)="Confirm(itemTrade)">
+                        Confirm
+                      </button>
+                    </td>
+                    <td *ngIf="isDisplay_OrderTime">{{itemTrade.orderTime}}</td>
+                    <td><b>{{itemTrade.symbol_Prefix}}</b>/{{itemTrade.symbol_Suffix}}</td>
+                    <td *ngIf="isDisplay_Side">
+                        @if (itemTrade.side == 'BUY') 
+                        {
+                          <b class="text-success">
+                            {{itemTrade.side}}
+                          </b>
+                        }
+                        @else 
+                        {
+                          <b class="text-danger">
+                            {{itemTrade.side}}
+                          </b>
+                        }
+                    </td>
+                    <td>{{itemTrade.fillAndOrderPrice_Suffix}}</td>
+                    <td >{{itemTrade.filledAndTotal_Suffix_Value}}</td>
+                    <td *ngIf="isDisplay_OrderValue">{{itemTrade.filledAndOrderValue_Prefix}} /<b>{{itemTrade.symbol_Suffix}}</b></td>
+                    @if(isDisplay_Fee)
                     {
-                      /{{itemTrade.symbol_Prefix}}
+                      <td>{{itemTrade.fee}}
+                        @if (itemTrade.side == 'BUY') 
+                        {
+                          /{{itemTrade.symbol_Prefix}}
+                        }
+                        @else 
+                        {
+                          /{{itemTrade.symbol_Suffix}}
+                        }
+                      </td>
                     }
-                    @else 
-                    {
-                      /{{itemTrade.symbol_Suffix}}
-                    }
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                  </tr>
+                </tbody>
+              </table>
+            </div>          
+            
           </div>
       </div>
   </div>

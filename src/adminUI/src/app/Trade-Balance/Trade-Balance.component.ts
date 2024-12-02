@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TradeService } from './../../shared/services/historyOrderTrading/trade.service';
@@ -15,28 +15,36 @@ export class TradeBalanceComponent implements OnInit {
   title = 'Trade Balance';
   isLoading: boolean = false;
   errorMessage: string | null = null;
-  historyOrderTrade: HistoryOrderTradeInterface[] = [];
-  constructor(private tradeService: TradeService) 
-  { }
+  historyOrderTradeDisplay: HistoryOrderTradeInterface[] = [];
+  historyOrderTradeOrginal: HistoryOrderTradeInterface[] = [];
+  constructor(private tradeService: TradeService) { }
+
+  sideDropDownName = 'All';
+  symbolPrefixDropDownName = "All TOKEN";
+  isresolveDropDownName = 'All STATUS';
+  
+
+  isDisplay_OrderTime = true;
+  isDisplay_Side = true;
+  isDisplay_OrderValue = true;
+  isDisplay_Fee = true;
 
   ngOnInit() {
-    this.fetchHistoryOrderTrade();
-    console.log(this.historyOrderTrade);
-    
+    this.tradeService.setSide("");
+    this.fetchTradesLoop('');
   }
 
-  Confirm(item: { id: string, isResovlve: boolean }) {
-    item.isResovlve = !item.isResovlve; // Toggle the checked value
-
-    this.tradeService.changeIsResolve(item.id).subscribe({
-      next: (isResolved) => console.log('Success:', isResolved),
-      error: (err) => console.error('Failed:', err.message),
-    });
+  Confirm(item: { id: string, isResovlve: number }) {
+    item.isResovlve = item.isResovlve == 1 ? 2 : 1;
+    this.tradeService.changeIsResolve(item.id).subscribe(
+      (data) => {},
+      (error) => {
+        console.error('Error in component:', error);
+      });
   }
 
-  FormatList()
-  {
-    this.historyOrderTrade = this.historyOrderTrade.map(item => {
+  FormatList(inputData: HistoryOrderTradeInterface[]): HistoryOrderTradeInterface[] {
+    return inputData.map(item => {
       const formattedDatetime = new Date(item.orderTime)
         .toISOString()
         .slice(0, 19)
@@ -46,21 +54,67 @@ export class TradeBalanceComponent implements OnInit {
         orderTime: formattedDatetime,
       };
     });
-   }
-
-  fetchHistoryOrderTrade(): void {
-    this.isLoading = true;
-    this.errorMessage = null;
-    this.tradeService.getTrades().subscribe({
-      next: (historyOrderTrade: HistoryOrderTradeInterface[]) => {
-        this.historyOrderTrade = historyOrderTrade;
-        this.isLoading = false;
-        this.FormatList();
-      },
-      error: (error: any) => {
-        this.errorMessage = 'Failed to load history order trade. Please try again later.';
-        this.isLoading = false;
-      }
+  }
+  fetchTradesLoop(side: string): void {
+    this.tradeService.setSide(side);
+    this.tradeService.getTrade(5000).subscribe((trades) => {
+      this.historyOrderTradeDisplay = this.FormatList(trades);
     });
   }
+  setSide(side: string)
+  {
+    this.sideDropDownName = side;
+    this.tradeService.setSide(this.sideDropDownName);
+    this.tradeService.getByParam().subscribe((trades) =>
+    {
+      this.historyOrderTradeDisplay = this.FormatList(trades);
+    });
+  }
+
+  setSymbolPrefix(symbolPrefix: string)
+  {
+    this.symbolPrefixDropDownName = symbolPrefix;
+    this.tradeService.setSymbolPrefix(this.symbolPrefixDropDownName);
+    this.tradeService.getByParam().subscribe((trades) =>
+    {
+      this.historyOrderTradeDisplay = this.FormatList(trades);
+    });
+  }
+
+  setIsresolveDropDownName(isresolveDropDownName: string)
+  {
+    this.isresolveDropDownName = isresolveDropDownName;
+  }
+  genIsResolve(item: {isResovlve: number }):boolean
+  {
+    if(item.isResovlve == 1)
+      return true;
+    return false;
+  }
+  setIsResolve(isResovlve: number )
+  {
+      switch(isResovlve) { 
+        case 1: { 
+          //statements; 
+          this.isresolveDropDownName = 'Resolved';
+          break; 
+        } 
+        case 2: { 
+          //statements; 
+          this.isresolveDropDownName = 'Not Yet';
+          break; 
+        } 
+        default: { 
+          //statements; 
+          this.isresolveDropDownName = 'ALL STATUS';
+          break; 
+        } 
+    } 
+    this.tradeService.setIsResolve(isResovlve);
+    this.tradeService.getByParam().subscribe((trades) =>
+      {
+        this.historyOrderTradeDisplay = this.FormatList(trades);
+      });
+  }
+
 }

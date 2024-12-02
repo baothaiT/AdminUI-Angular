@@ -20,6 +20,7 @@ export class AppComponent {
   _logURL = UrlConfig.logsURL;
   _tradeBalanceURL = UrlConfig.tradeBalanceURL;
   _tableexampleURL = UrlConfig.tableURL;
+  _configurationURL = UrlConfig.configurationURL;
 
   constructor(private router: Router) {
     this.router.events.subscribe(() => {

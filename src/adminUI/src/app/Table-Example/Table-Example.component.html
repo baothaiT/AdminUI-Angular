@@ -1,13 +1,23 @@
 <main>
-  <div class="container-fluid px-4">
-      <ol class="breadcrumb mb-4">
-          <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-          <li class="breadcrumb-item active">{{title}}</li>
-      </ol>
-      <h1 class="mt-4">{{title}}</h1>
-      <div class="card mb-4">
-          <div class="card-body">
-              <table id="datatablesSimple">
+    <div class="container-fluid px-4">
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+            <li class="breadcrumb-item active">{{title}}</li>
+        </ol>
+        <h1 class="mt-4">{{title}}</h1>
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Side
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#" (click)="fetchTrades('SELL')">SELL</a></li>
+                      <li><a class="dropdown-item" href="#" (click)="fetchTrades('BUY')">BUY</a></li>
+                    </ul>
+                  </div>
+
+                <!-- <table id="datatablesSimple">
                   <thead>
                       <tr>
                           <th>Name</th>
@@ -39,8 +49,8 @@
                       </tr>
 
                   </tbody>
-              </table>
-          </div>
-      </div>
-  </div>
+              </table> -->
+            </div>
+        </div>
+    </div>
 </main>

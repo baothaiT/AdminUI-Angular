@@ -12,6 +12,7 @@ export class UrlConfig {
     public static unauthorizedURL = 'unauthorized';
     public static forgotPasswordURL = 'forgotpassword';
     public static tradeBalanceURL = 'tradebalance';
+    public static configurationURL = 'configuration';
     public static allURL = '**';
 
 
@@ -22,5 +23,6 @@ export class UrlConfig {
         '/' + UrlConfig.accountURL,
         '/' + UrlConfig.tableURL,
         '/' + UrlConfig.tradeBalanceURL,
+        '/' + UrlConfig.configurationURL
     ];
 }

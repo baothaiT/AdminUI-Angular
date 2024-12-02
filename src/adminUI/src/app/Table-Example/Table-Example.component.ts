@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./Table-Example.component.css']
 })
 export class TableExampleComponent implements OnInit {
+fetchTrades(arg0: string) {
+throw new Error('Method not implemented.');
+}
   title = 'Table Exampple';
   constructor() { }
 

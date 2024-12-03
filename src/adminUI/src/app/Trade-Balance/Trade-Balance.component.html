@@ -45,6 +45,10 @@
             </div>
             <!-- End -->
             <br />
+            <div>
+              <p class="font-weight-normal">Total: {{_total}}</p>
+            </div>
+            <br />
 
             <!-- Start Select Configuration -->
             <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
@@ -69,7 +73,7 @@
                     <th *ngIf="isDisplay_OrderTime">Order Time</th>
                     <th>Symbol</th>
                     <th *ngIf="isDisplay_Side">Side</th>
-                    <th>Order Price</th>
+                    <th>Order Price <a (click)="SortOrderPrice()"><i class="fas fa-sort"></i></a></th>
                     <th>Total</th>
                     <th *ngIf="isDisplay_OrderValue">Order Value</th>
                     <th *ngIf="isDisplay_Fee">Fee</th>
@@ -105,7 +109,7 @@
                           </b>
                         }
                     </td>
-                    <td>{{itemTrade.fillAndOrderPrice_Suffix}}</td>
+                    <td>{{itemTrade.fillAndOrderPrice_Suffix}}</td> <!-- Order Price-->
                     <td >{{itemTrade.filledAndTotal_Suffix_Value}}</td>
                     <td *ngIf="isDisplay_OrderValue">{{itemTrade.filledAndOrderValue_Prefix}} /<b>{{itemTrade.symbol_Suffix}}</b></td>
                     @if(isDisplay_Fee)

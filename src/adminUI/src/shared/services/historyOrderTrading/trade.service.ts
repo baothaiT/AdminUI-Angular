@@ -3,6 +3,7 @@ import { catchError, interval, map, Observable, of, startWith, switchMap, throwE
 import { HistoryOrderTradeInterface } from '../../interfaces/HistoryOrderTrade-interface';
 import { Configuration } from '../../Configuration/Configuration';
 import { HttpClient } from '@angular/common/http';
+import { HistoryOrderTradingEnum } from '../../common/Enums/HistoryOrderTradingEnum';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,13 @@ export class TradeService {
   private side = '';
   private isResolve = 0;
   private symbolPrefix= '';
+  private _colSortName : HistoryOrderTradingEnum = HistoryOrderTradingEnum.None;
   constructor(private http: HttpClient) { }
 
+  setColSortName(colSortName: HistoryOrderTradingEnum)
+  {
+    this._colSortName = colSortName;
+  }
   setSide(side: string)
   {
     this.side = side;
@@ -31,7 +37,7 @@ export class TradeService {
     return interval(milisecond).pipe(
       startWith(0),
       switchMap((data) => {
-        if (this.side === '' && this.symbolPrefix == '' && this.isResolve == 0) {
+        if (this.side === '' && this.symbolPrefix == '' && this.isResolve == 0 && this._colSortName == HistoryOrderTradingEnum.None) {
           return this.getAll();
         }
         else {
@@ -57,6 +63,8 @@ export class TradeService {
     {
       url = this.checkURL(url) + `IsResovlve=${this.isResolve}`;
     }
+
+    url = this.checkURL(url) + `sortName=${this._colSortName}`;
 
     return this.http.get<HistoryOrderTradeInterface[]>(url).pipe(
       map((historyOrderTrading) => historyOrderTrading || []),

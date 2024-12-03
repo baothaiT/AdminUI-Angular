@@ -45,10 +45,10 @@
             </div>
             <!-- End -->
             <br />
-            <div>
+            <div *ngIf="_total != 0">
               <p class="font-weight-normal">Total: {{_total}}</p>
             </div>
-            <br />
+            <br *ngIf="_total != 0" />
 
             <!-- Start Select Configuration -->
             <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">

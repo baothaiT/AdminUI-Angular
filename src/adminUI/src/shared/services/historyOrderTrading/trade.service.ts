@@ -4,6 +4,7 @@ import { HistoryOrderTradeInterface } from '../../interfaces/HistoryOrderTrade-i
 import { Configuration } from '../../Configuration/Configuration';
 import { HttpClient } from '@angular/common/http';
 import { HistoryOrderTradingEnum } from '../../common/Enums/HistoryOrderTradingEnum';
+import { IsResolveNameEnum } from '../../common/Enums/IsResolveNameEnum';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class TradeService {
 
   private apiUrl = Configuration.HistoryOrderTradingAPI; // Replace with your API endpoint
   private side = '';
-  private isResolve = 0;
+  private isResolve : IsResolveNameEnum = IsResolveNameEnum.ALLSTATUS;
   private symbolPrefix= '';
   private _colSortName : HistoryOrderTradingEnum = HistoryOrderTradingEnum.None;
   constructor(private http: HttpClient) { }
@@ -25,7 +26,7 @@ export class TradeService {
   {
     this.side = side;
   }
-  setIsResolve(isResolve: number)
+  setIsResolve(isResolve: IsResolveNameEnum)
   {
     this.isResolve = isResolve;
   }
@@ -37,7 +38,7 @@ export class TradeService {
     return interval(milisecond).pipe(
       startWith(0),
       switchMap((data) => {
-        if (this.side === '' && this.symbolPrefix == '' && this.isResolve == 0 && this._colSortName == HistoryOrderTradingEnum.None) {
+        if (this.side === '' && this.symbolPrefix == '' && this.isResolve == IsResolveNameEnum.ALLSTATUS && this._colSortName == HistoryOrderTradingEnum.None) {
           return this.getAll();
         }
         else {

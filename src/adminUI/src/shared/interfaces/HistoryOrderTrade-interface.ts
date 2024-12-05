@@ -11,6 +11,7 @@ export interface HistoryOrderTradeInterface {
     filledAndTotal_Suffix_Value: string,
     filledAndTotal_Suffix_Symbol: string
     filledAndOrderValue_Prefix: string,
+    completed: number,
     fee: string,
     isResovlve: number
 }

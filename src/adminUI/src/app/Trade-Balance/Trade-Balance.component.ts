@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { TradeService } from './../../shared/services/historyOrderTrading/trade.service';
 import { HistoryOrderTradeInterface } from '../../shared/interfaces/HistoryOrderTrade-interface';
 import { HistoryOrderTradingEnum } from '../../shared/common/Enums/HistoryOrderTradingEnum';
+import { IsResolveNameEnum } from '../../shared/common/Enums/IsResolveNameEnum';
 
 @Component({
   standalone: true,
@@ -13,12 +14,15 @@ import { HistoryOrderTradingEnum } from '../../shared/common/Enums/HistoryOrderT
   imports: [FormsModule, CommonModule]
 })
 export class TradeBalanceComponent implements OnInit {
+[x: string]: any;
   title = 'Trade Balance';
   isLoading: boolean = false;
   errorMessage: string | null = null;
   historyOrderTradeDisplay: HistoryOrderTradeInterface[] = [];
   historyOrderTradeOrginal: HistoryOrderTradeInterface[] = [];
   constructor(private tradeService: TradeService) { }
+
+  IsResolveNameEnum = IsResolveNameEnum;
 
   sideDropDownName = 'All';
   symbolPrefixDropDownName = "All TOKEN";
@@ -96,7 +100,7 @@ export class TradeBalanceComponent implements OnInit {
     switch (isResovlve) {
       case 1: {
         //statements; 
-        this.isresolveDropDownName = 'Resolved';
+        this.isresolveDropDownName = 'Resolved'; 
         break;
       }
       case 2: {
@@ -140,6 +144,12 @@ export class TradeBalanceComponent implements OnInit {
     this.tradeService.getByParam().subscribe((trades) => {
       this.historyOrderTradeDisplay = this.FormatList(trades);
     });
+  }
+
+  inputNumber: number = 0;
+  onNumberChange(event: any): void {
+    this.inputNumber = +event.target.value; // Convert to number
+    console.log('Updated number:', this.inputNumber);
   }
   
 }

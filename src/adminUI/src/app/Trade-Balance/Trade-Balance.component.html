@@ -36,9 +36,9 @@
                     @if(isresolveDropDownName == ''){ ALL STATUS} @else { {{isresolveDropDownName}} }
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                    <li><a class="dropdown-item" href="#" (click)="setIsResolve(0)" >All STATUS</a></li>
-                    <li><a class="dropdown-item" href="#" (click)="setIsResolve(1)" >RESOLVED</a></li>
-                    <li><a class="dropdown-item" href="#" (click)="setIsResolve(2)" >NOT YET</a></li>
+                    <li><a class="dropdown-item" href="#" (click)="setIsResolve(IsResolveNameEnum.ALLSTATUS)" >All STATUS</a></li>
+                    <li><a class="dropdown-item" href="#" (click)="setIsResolve(IsResolveNameEnum.RESOLVED)" >RESOLVED</a></li>
+                    <li><a class="dropdown-item" href="#" (click)="setIsResolve(IsResolveNameEnum.NOTYET)" >NOT YET</a></li>
                   </ul>
                 </div>
               </div>
@@ -75,6 +75,7 @@
                     <th *ngIf="isDisplay_Side">Side</th>
                     <th>Order Price <a (click)="SortOrderPrice()"><i class="fas fa-sort"></i></a></th>
                     <th>Total</th>
+                    <th>Completed</th>
                     <th *ngIf="isDisplay_OrderValue">Order Value</th>
                     <th *ngIf="isDisplay_Fee">Fee</th>
                   </tr>
@@ -111,6 +112,17 @@
                     </td>
                     <td>{{itemTrade.fillAndOrderPrice_Suffix}}</td> <!-- Order Price-->
                     <td >{{itemTrade.filledAndTotal_Suffix_Value}}</td>
+                    <td>
+                      @if (genIsResolve(itemTrade)) 
+                      {
+                        <input type="number" [value]="itemTrade.completed" (keyup.enter)="onNumberChange($event)" disabled>
+                      }
+                      @else 
+                      {
+                        <input type="number" [value]="itemTrade.completed" (keyup.enter)="onNumberChange($event)">
+                      }
+                      
+                    </td>
                     <td *ngIf="isDisplay_OrderValue">{{itemTrade.filledAndOrderValue_Prefix}} /<b>{{itemTrade.symbol_Suffix}}</b></td>
                     @if(isDisplay_Fee)
                     {
